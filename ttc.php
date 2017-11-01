@@ -1,5 +1,6 @@
 <?php
 include("Header.php");
+include("connection.php");
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
@@ -7,6 +8,7 @@ include("Header.php");
 <title>Together We Can </title>
 <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
+
 </head>
 <body>
 <div id="content">
@@ -23,7 +25,7 @@ Emergency Contact:    </br>
 <section class="container">		
         
 <div id="login">
-<form action="" method="post" name="s" onsubmit='return validated()'> 
+<form action="" method="post" name="ttcUser" onsubmit='return validated()'> 
 <center>                                 
 <caption>
  <table border="0" cellpadding="1" width="90%">
@@ -34,11 +36,23 @@ Emergency Contact:    </br>
 			 <option value="0">Select the subject</option>         
 		   </select></td>
    	</tr>
-	<tr>
+	<tr>		
      	<td><h4><b>Region</td>
-     	<td><div class="col-md-11">
+     	<td><div class="col-md-11">			
 		   <select name="region" class="form-control">
-			 <option value="0">Select the Region of the issue</option>         
+			   <option value="0">Select the Region of the issue</option> 
+			   <?php
+				//execute the SQL query and return records
+				$result = @mysql_query("SELECT * FROM region");
+
+				//fetch tha data from the database 
+				while ($row = @mysql_fetch_array($result)) 
+				{
+				?>			
+			 		<option value="<?= $row{'Region_ID'}?>"><?= $row{'Region_Name'}?></option>
+			    <?php
+				}
+			    ?>
 		   </select></td>
    	</tr>
 	<tr>
@@ -57,16 +71,22 @@ Emergency Contact:    </br>
 		 <td><div class="col-md-11"> <input name="ttcTime" type="time" value="2017-01-01"  class="form-control"/></td>
 	</tr>
 	 <tr>
-		 <td><h4><b>TTC Route</td>
-		 <td><div class="col-md-11"><input type="text" name="city" maxlength="20" placeholder="Your City" class="form-control"></td>
+		 <td><h4><b>TTC Type</td>
+		 <td><div class="col-md-11">
+		   <select name="ttcType" class="form-control">
+			 <option value="0">Select the TTC type</option>         
+		   </select></td>
 	 </tr>
 	 <tr>
-		 <td><h4><b>Email Id</td>
-		 <td><div class="col-md-11">  <input type="text" name="email" maxlength="40" placeholder="Your Email Id" class="form-control"></td>
+		 <td><h4><b>TTC Route</td>
+		 <td><div class="col-md-11">
+		   <select name="city" class="form-control">
+			 <option value="0">Select the route</option>         
+		   </select></td>
 	 </tr>
 	 <tr>
 		 <td><h4><b>TTC Stop Name</td>
-		 <td><div class="col-md-11">  <input type="text" name="ttcstopname" maxlength="10" placeholder="Your Mob No" class="form-control"></td>
+		 <td><div class="col-md-11">  <input type="text" name="ttcstopname" maxlength="10" placeholder="TTC Stop Name" class="form-control"></td>
 	 </tr>
 	 <tr>
 		 <td><h4><b>TTC Transport Number</td>
@@ -89,3 +109,7 @@ value="Report" class="btn btn-two" width="200">&nbsp;&nbsp;&nbsp;&nbsp;<input ty
 </section>
 </body>
 	 </html>
+<?php 
+	//close the connection
+	@mysql_close($con);
+?>
