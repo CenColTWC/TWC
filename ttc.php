@@ -10,6 +10,14 @@ include("connection.php");
 <link rel="stylesheet" href="css/1.css" type="text/css" media="screen,projection" />
 
 </head>
+<script type="text/javascript">
+	function load_city()
+	{
+		var Region_ID = document.ttcUser.region.value;
+		<?php $abc = "<script>document.write(Region_ID)</script>"?>
+		alert("Hi");
+	}  
+</script>
 <body>
 <div id="content">
 	<h2><Strong>TTC</Strong></h2>
@@ -39,7 +47,7 @@ Emergency Contact:    </br>
 	<tr>		
      	<td><h4><b>Region</td>
      	<td><div class="col-md-11">			
-		   <select name="region" class="form-control">
+		   <select name="region" class="form-control"  onchange=load_city()>
 			   <option value="0">Select the Region of the issue</option> 
 			   <?php
 				//execute the SQL query and return records
@@ -56,12 +64,26 @@ Emergency Contact:    </br>
 		   </select></td>
    	</tr>
 	<tr>
-	  	<td><h4><b>City</td>
+	  	<td><h4><b>City<?= $abc?></td>
 	  	<td><div class="col-md-11">
 		   <select name="city" class="form-control">
-			 <option value="0">Select the city</option>         
+			   <option value="0">Select the City</option> 
+			   
+			   <?php
+				//execute the SQL query and return records
+				$result_city = @mysql_query("SELECT * FROM city where Region_ID = " . $abc);
+     			
+				//fetch tha data from the database 
+				while ($row_city = @mysql_fetch_array($result_city)) 
+				{
+				?>		
+				   <option value="<?= $row_city{'City_ID'}?>"><?= $row_city{'City_Name'}?></option>
+			    <?php
+				}
+			    ?> 
+			
 		   </select></td>
-	</tr>
+	</tr>			
 	<tr>
 		 <td width="260"><h4><b>Date</td>
 		 <td><div class="col-md-11"> <input name="ttcDate" type="date" value="2017-01-01"  class="form-control"/></td>
